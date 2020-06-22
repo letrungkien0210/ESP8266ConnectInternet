@@ -4,7 +4,7 @@
 const byte RX = 3;          // Chân 3 được dùng làm chân RX
 const byte TX = 2;          // Chân 2 được dùng làm chân TX
  
-SoftwareSerial mySerial = SoftwareSerial(RX, TX); 
+SoftwareSerial mySerial(RX, TX); 
  
  
 SerialCommand sCmd(mySerial); // Khai báo biến sử dụng thư viện Serial Command
@@ -42,7 +42,6 @@ void led() {
   JsonObject root;//đặt một biến root mang kiểu json
   deserializeJson(jsonDocument, json);// fixme: throw error at here - Error compiling for board Arduino Uno => https://arduinojson.org/v6/api/json/deserializejson/
 
- Serial.println("jsonDocument: " + jsonDocument);
   int redStatus = jsonDocument["led"][0];//json -> tham số root --> phần tử thứ 0. Đừng lo lắng nếu bạn không có phần tử này, không có bị lỗi đâu!
   int blueStatus = jsonDocument["led"][1];//json -> tham số root --> phần tử thứ 0. Đừng lo lắng nếu bạn không có phần tử này, không có bị lỗi đâu!
  

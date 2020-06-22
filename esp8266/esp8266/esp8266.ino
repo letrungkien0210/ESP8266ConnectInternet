@@ -24,7 +24,7 @@ SocketIOClient client;
 const char* ssid = "AnNhienTech";
 const char* password = "SushiLily";
 
-char host[] = "192.168.68.114";
+char host[] = "192.168.68.104";
 int port = 3484;
 
 //từ khóa extern: dùng để #include các biến toàn cục ở một số thư viện khác. Trong thư viện SocketIOClient có hai biến toàn cục
