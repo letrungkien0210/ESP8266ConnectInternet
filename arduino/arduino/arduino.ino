@@ -12,6 +12,7 @@ SerialCommand sCmd(mySerial); // Khai báo biến sử dụng thư viện Serial
 
 int red = 4, blue = 5; // led đỏ đối vô digital 4, led xanh đối vô digital 5
 int rainSensor = 6; // Chân tín hiệu cảm biến mưa ở chân digital 6 (arduino)
+int relay = 9;
 
 const unsigned long CHU_KY_1_LA_BAO_NHIEU = 5000UL; //Cứ sau 5000ms = 5s thì chu kỳ lặp lại
 
@@ -25,6 +26,7 @@ void setup() {
   //pinMode 2 đèn LED là OUTPUT
   pinMode(red, OUTPUT);
   pinMode(blue, OUTPUT);
+  pinMode(relay, OUTPUT);
 
   pinMode(rainSensor, INPUT); // Đặt chân cảm biến mưa là INPUT, vì tín hiệu sẽ được truyền đến cho Arduino
 
@@ -32,6 +34,7 @@ void setup() {
   // Một số hàm trong thư viện Serial Command
   sCmd.addCommand("LED",   led); //Khi có lệnh LED thì sẽ thực thi hàm led
   sCmd.addCommand("RAIN",  rain_detect);//Khi có lệnh RAIN thì sẽ thực thi hàm rain để kiểm tra trị cảm biến mưa
+  sCmd.addCommand("RELAY", relay_action);//Khi có lệnh RELAY, thì sẽ thực thi hàm relay_action bật/tắt relay
   Serial.println("Da san sang nhan lenh");
 }
 
@@ -104,4 +107,21 @@ void rain_detect() {
   mySerial.print('\r');           // gửi \r
   serializeJson(root, mySerial);
   mySerial.print('\r');
+}
+
+void relay_action(){
+  Serial.println("RELAY ACTION");
+  char *json = sCmd.next(); //Chỉ cần một dòng này để đọc tham số nhận đươc
+  Serial.println(json);
+  StaticJsonDocument<200> jsonDocument;
+  deserializeJson(jsonDocument, json);
+
+  int relayStatus = jsonDocument["relay"];//json -> tham số root --> phần tử thứ 0. Đừng lo lắng nếu bạn không có phần tử này, không có bị lỗi đâu!
+
+  //kiểm thử giá trị
+  Serial.print(F("relay status "));
+  Serial.println(relayStatus);
+
+  //xuất ra màn hình
+  digitalWrite(relay, relayStatus);
 }
